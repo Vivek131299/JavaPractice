@@ -20,10 +20,9 @@ public class TernaryOpAndPrecedence {
 
         double a = 20.00;
         double b = 80.00;
-        double c = (a + b) * 100.00; /*
-                                      * If we do [a + b * 100.00], value of c will be 8020.0 beacuse * operator has
-                                      * higher precendence than + operator.
-                                      */
+        double c = (a + b) * 100.00;
+        // If we do [a + b * 100.00], value of c will be 8020.0 beacuse * operator has
+        // higher precendence than + operator.
         double d = c % 40.00;
         boolean isZero;
         if (d == 0) {
