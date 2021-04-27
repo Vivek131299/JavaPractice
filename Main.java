@@ -35,8 +35,18 @@ public class Main {
 		 * surrounded by single quotes, like 'A' or 'c'
 		 */
 		char a = 65; // Alternatively, you can use ASCII values to display certain characters
-
+		char b = '\u0044'; // Alternatively, you can use unicode values to display certain characters
 		System.out.println("Hello World from " + name);
+		name = name + "Tim";
+		/*
+		 * In JAVA, String is immutable, we can delete characters out of a string but
+		 * that's not strictly true. This means you can't change a String after it's
+		 * created. Instead, what happens is a new String is created.
+		 */
+		System.out.println("This is appended string to variable name: " + name); // output: JohnTim15
+		name = name + myNum; // Adding String and int, number gets appended after string as datatype of
+								// variable 'name' is String.
+		System.out.println("Value of String after adding int to it: " + name);
 		System.out.println("Value of final int myNum variable = " + myNum);
 		System.out.println("Value of long myLongNum variable = " + myLongNum);
 		System.out.println("Value of float myFloatNum variable = " + myFloatNum);
@@ -45,6 +55,7 @@ public class Main {
 		System.out.println("Value of double scientific number d1 variable = " + d1);
 		System.out.println("Value of char grade variable = " + grade);
 		System.out.println("Value of char a variable by using ASCII value = " + a);
+		System.out.println("Value of char b variable by using unicode value = " + b);
 
 	}
 }
