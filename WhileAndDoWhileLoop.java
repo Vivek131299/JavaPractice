@@ -39,7 +39,7 @@ public class WhileAndDoWhileLoop {
                       // its first iteration will be 5 instead of 4.
             if (!isEvenNumber(number)) {
                 continue; // 'continue' statement bypass (will not execute) all the statements after it in
-                          // the loop and goes back to the start of the loop with the next number. So
+                          // the loop and goes back to the start of the loop with the next iteration. So
                           // here, the below print statement will not execute if number is not even.
             }
             countEven++;
