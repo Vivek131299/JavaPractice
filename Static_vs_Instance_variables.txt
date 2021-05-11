@@ -1,0 +1,24 @@
+Static vs Instance Variables : 
+
+
+Static variables:
+
+Declared by using the keyword static.
+Static variables are also known as static member variables.
+Every instance of that class shares the same static variables (Staic variabes are shared among instances).
+If changes are made to that variable, all other instances will see the effect of the change.
+
+Static variabes are not used very often but can sometimes be very useful.
+For example when reading user input using Scanner we will declare scanner as a static variable. 
+That way static methods can access it directly.
+
+
+Instance variables:
+
+They don't use the static keyword.
+They are also known as fields or member variables.
+Instance variables belongs to specific instance of a class.
+
+Every instance has its own copy of an instance variable.
+Every instance can have a different value(state).
+Instance variabes represent the state of an instance.
