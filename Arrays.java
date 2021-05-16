@@ -10,6 +10,17 @@ public class Arrays {
 
         // We can also write above two lines in one line as:
         // int[] myIntArray = new int[10];
+        // Above, we are not directly referring to an object by 'myIntArray', we are
+        // referring to an address of an array through that variable.
+        // Arrays are reference types so they refers to an address like classes.
+
+        // So, if we create a new array without using 'new' keyword,
+        // for e.g.- int[] array2 = array1;
+        // So, now both the arrays(array1 and array2) are referring to same address.
+        // So, if we change any element of array1, it will affect to array2 also, and
+        // vice versa.
+
+        // Wherever we see the 'new' keyword, we are creating a reference to an object.
 
         myIntArray[0] = 10; // Storing 10 as first element of array.
         myIntArray[1] = 20;
