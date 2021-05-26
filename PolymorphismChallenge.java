@@ -2,7 +2,7 @@ public class PolymorphismChallenge {
 
     public static void main(String[] args) {
 
-        Car car = new Car(8, "Base car");
+        CarClass car = new CarClass(8, "Base car");
         System.out.println(car.startEngine());
         System.out.println(car.accelerate());
         System.out.println(car.brake());
@@ -24,13 +24,13 @@ public class PolymorphismChallenge {
     }
 }
 
-class Car {
+class CarClass {
     private boolean engine;
     private int cylinders;
     private String name;
     private int wheels;
 
-    public Car(int cylinders, String name) {
+    public CarClass(int cylinders, String name) {
         this.cylinders = cylinders;
         this.name = name;
         this.wheels = 4;
@@ -58,7 +58,7 @@ class Car {
     }
 }
 
-class Mitsubishi extends Car {
+class Mitsubishi extends CarClass {
 
     public Mitsubishi(int cylinders, String name) {
         super(cylinders, name);
@@ -83,7 +83,7 @@ class Mitsubishi extends Car {
     }
 }
 
-class Ford extends Car {
+class Ford extends CarClass {
 
     public Ford(int cylinders, String name) {
         super(cylinders, name);
@@ -105,7 +105,7 @@ class Ford extends Car {
     }
 }
 
-class Holden extends Car {
+class Holden extends CarClass {
 
     public Holden(int cylinders, String name) {
         super(cylinders, name);
