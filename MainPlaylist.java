@@ -2,7 +2,7 @@ import java.util.*;
 
 public class MainPlaylist {
 
-    private static ArrayList<Album> albums = new ArrayList<Album>();
+    private static List<Album> albums = new ArrayList<Album>();
 
     public static void main(String[] args) {
 
@@ -26,7 +26,9 @@ public class MainPlaylist {
 
         albums.add(album);
 
-        LinkedList<Song> playList = new LinkedList<Song>();
+        List<Song> playList = new ArrayList<Song>(); // First there we had LinkedList playList, and now we have done List and ArrayList,
+                                                     // but still code works fine because Lists, ArrayLists, LinkedLists and Vector internally
+                                                      // implements same interfaces. (this is edit from Interfaces lecture).
         albums.get(0).addToPlaylist("Holy Man", playList); // Here, we are adding the song named 'Holy Man',
                                                                 // from the 1st album (albums.get(0)) from albums ArrayList to the playList.
         albums.get(0).addToPlaylist("The gypsy", playList);
@@ -46,7 +48,7 @@ public class MainPlaylist {
         play(playList);
     }
 
-    private static void play(LinkedList<Song> playList) {
+    private static void play(List<Song> playList) {
         Scanner scanner = new Scanner(System.in);
         boolean quit = false;
         boolean forward = true;
@@ -156,7 +158,7 @@ public class MainPlaylist {
                 "6 - delete current song from playlist.");
     }
 
-    private static void printList(LinkedList<Song> playList) {
+    private static void printList(List<Song> playList) {
         Iterator<Song> iterator = playList.iterator(); // We are using regular Iterator here instead of ListIterator because,
                                                            // we are not going backwards and forwards here(we just have to print playList).
         System.out.println("===============================================");
