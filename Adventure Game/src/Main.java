@@ -28,6 +28,9 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
 
+        /*
+        Commenting this after we removed addExit() method from Location class and defined a new temporary Map below.
+        Instead of this we are now pasting these line one ny one after putting exits for each location fromline 51.
         // Adding locations:
         locations.put(0, new Location(0, "You are sitting in front of computer learning Java"));
         locations.put(1, new Location(1, "You are standing at the end of a road."));
@@ -37,9 +40,66 @@ public class Main {
         locations.put(5, new Location(5, "You are in the forest"));
         // As we can see above we are creating a new object Of Location class as a value for keys 0,1,2,3,4,5 which has
         // 2 parameters, 1st is locationID (0,1,2,3,4,5) and 2nd is description which is a String.
+*/
+        
+
+        /*
+        * We are adding this later on because we changed the constructor of Location class.
+        * Since we have removed the addExit() method from Location class, we have to create a temporary Map here to 
+        * add exits and then pass that to a constructor.
+        * */
+        Map<String, Integer> tempExit = new HashMap<String, Integer>();
+        // For location 0
+        locations.put(0, new Location(0, "You are sitting in front of computer learning Java", tempExit));
 
 
+        // For location 1 (Road):
+        tempExit = new HashMap<String, Integer>();
+        tempExit.put("W", 2);
+        tempExit.put("E", 3);
+        tempExit.put("S", 4);
+        tempExit.put("N", 5);
+        locations.put(1, new Location(1, "You are standing at the end of a road.", tempExit));
 
+        // For location 2 (Hill):
+        tempExit = new HashMap<String, Integer>();
+        tempExit.put("N", 5);
+        locations.put(2, new Location(2, "You are at the top of a hill", tempExit));
+
+        // For location 3 (Building):
+        tempExit = new HashMap<String, Integer>();
+        tempExit.put("W", 1);
+        locations.put(3, new Location(3, "You are inside a building", tempExit));
+
+        // For location 4 (Valley):
+        tempExit = new HashMap<String, Integer>();
+        tempExit.put("N", 1);
+        tempExit.put("W", 2);
+        locations.put(4, new Location(4, "You are in a valley beside a stream", tempExit));
+
+        // For location 5 (Forest):
+        tempExit = new HashMap<String, Integer>();
+        tempExit.put("S", 1);
+        tempExit.put("W", 2);
+        locations.put(5, new Location(5, "You are in the forest", tempExit));
+
+        // After doing above, we are also able to delete the part of the Map like:
+        // tempExit().remove("S");
+        // So if we run program then we will not find South direction for location 5.
+        // This is happening because we are still referring to exits Map for location 5.
+        // To solve this, we will do same as we did for getExits() method but only now we are going to apply it to setter
+        // instead of a getter.
+        // So we are now changing the constructor of Location class.(on line 14 of Location class). By doing this, we are
+        // not sharing any references of tempExit Map of this class with the exits Map of Location class.
+
+        // Now, even after we remove the direction from tempExit (like on line 87), we will still see South as direction.
+
+        // And now we can say that the class is now a fully IMMUTABLE class.
+        
+        
+        
+/* Commenting this after we removed addExit() method from Location class and defined a new temporary Map above.
+   Instead of this, we have written above code from line 47 to 66.
         // For adding exits to locations using addExit() method in Location class which takes
         // 2 parameters- direction(North, East, West, South) and location(0,1,2,3,5).
 
@@ -69,7 +129,7 @@ public class Main {
 //        locations.get(5).addExit("Q", 0);             // We were adding Q for 0 to quit in every location, so to avoid redundant
                                                         // code, we are removing(commenting) this from here and adding to Location
                                                         // constructor.
-
+*/
 
         // Map for some words that we will accept instead of just N,E,W,S :
         Map<String, String> vocabulary = new HashMap<String, String>();
@@ -141,5 +201,17 @@ public class Main {
         */
 
 
+        /*
+        * /////////////////////////////// IMMUTABLE CLASSES ////////////////////////////////
+        * 
+        * Immutable classes cannot be changed once they are created just like final variables.
+        * By doing this, instance of such class will be Immutable.
+        * We do this for encapsulation.
+        * If a class field or elements of immutable class like a list or a map is to be set once and never change again
+        * then what it needs to be done and where it needs to be set is in the Constructor.
+        * 
+        * So we are now changing the Location class constructor to accept the map object and will change our constructor
+        * signature and assign the passed map to our class fields. This means we can delete the addExits() method. 
+        * */
     }
 }
