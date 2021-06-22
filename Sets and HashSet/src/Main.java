@@ -110,5 +110,39 @@ public class Main {
         for (HeavenlyBody moon : moons) {
             System.out.println("\t" + moon.getName());
         }
+
+
+        /////////////////////////////////// equals() and hashCode() methods //////////////////////////////////
+
+        // Java warns us that if we are using our own objects as keys in Maps or as elements in Sets, then we should override
+        // the equals() and hashCode() methods.
+        // Below is what will happen if we do not override these two methods.
+        HeavenlyBody pluto = new HeavenlyBody("Pluto", 842); // We are adding here Pluto again with different orbitalPeriod.
+        planets.add(pluto);
+        for (HeavenlyBody planet : planets) {
+            System.out.println(planet.getName() + ": " + planet.getOrbitalPeriod());
+        }
+        // As we can see in the above code's output, we have 2 entries for Pluto planet, BUT we know that Set cannot contain
+        // duplicate elements, still our 'planets' has 2 same variable named 'Pluto'.
+        // This happened because Java objects do not compare equal, so the Set is happy to accept both of them.
+        // Even if we use them as keys in Map, same thing will happen as well.
+        // The reason that they don't compare equal is because the base object class from which all other classes are derived
+        // just defines a very simple equals method that performs what is known as referential equality and both references
+        // point to same object then they are equal otherwise they are not.
+        // So that's why equals() method needs to be overwritten.
+
+        // BUT if we are overriding the equals() method then we must also override the hashCode() method because if two objects
+        // can compare equal then their hash codes must also be the same.
+
+        // So when storing objects in a hashed collections(like HashSets or HashMaps), lets think if the collection is having
+        // a number of buckets to store the objects in.
+        // So the hashCode determines which bucket and objects gonna go into, Now here there is a requirement that any objects
+        // that are equal had the same hashCode so that they can be in same bucket, but the opposite is not required.
+        // So we first check the hashCode of the new object to the hashCode of each bucket and then if we find any bucket with
+        // same hashCode then the collection class will check that the object is already in that bucket then it will not
+        // be added to the collection.
+
+        // So, if two objects compare equal then they must have same hash code.
+        // So we add equals() and hashCode() methods in HeavenlyBody class.(from line 33).
     }
 }
