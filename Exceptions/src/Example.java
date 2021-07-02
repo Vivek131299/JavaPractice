@@ -6,8 +6,15 @@ public class Example {
 
     public static void main(String[] args) {
 
-        int result = divide();
-        System.out.println(result);
+        try { // We are adding try here later. (See comments from divide method from line 88 and before).
+            int result = divide();
+            System.out.println(result);
+        } catch(ArithmeticException | NoSuchElementException e) { // Checking for multiple exceptions by using Bitwise OR operator.
+            System.out.println(e.toString()); // e.toString() quotes the error into the String. So it will show like a String rather than in red error.
+            System.out.println("Unable to perform division");
+        }
+        // Now we can REMOVE try catch blocks from divide method as we are checking in main method.
+
         // Now, here we can get 2 exceptions - ArithmeticException (if we try to divide by 0), and
         // InputMismatchException (if we give input other than numbers/integers).
 
@@ -39,8 +46,9 @@ public class Example {
     }
 
     private static int divide() {
-        int x;
-        int y;
+        int x, y;
+
+        /**
         try {
             x = getInt();
             y = getInt();
@@ -59,9 +67,40 @@ public class Example {
         } catch(ArithmeticException e) {
             throw new ArithmeticException("Attempt to divide by zero");
         }
+        **/
+
 
         // So now even if we do ctrl + D (end of line) in input or try to divide by xero then we will get ArithmeticException.
         // And also Stack Trace is a lot simpler now, it's now referring to our code only.
+
+        /////////////// Multi Catch Exceptions ///////////////
+        // As we can see above we have multiple try and catch blocks. We can combine them.
+        // So what we can do is, we will put everything in try block and then add multiple catch block for each exception
+        // that can occur.
+        // So we can write above commented code (from line 51 to 68) as:
+
+        /**
+        try {
+            x = getInt();
+            y = getInt();
+            System.out.println("x is " + x + ", y is " + y);
+            return x / y;
+        } catch(NoSuchElementException e) {
+            throw new NoSuchElementException("No suitable input");
+        } catch(ArithmeticException e) {
+            throw new ArithmeticException("Attempt to divide by zero");
+        }
+         **/
+
+        // But we should check for exceptions in main method. So we add try and catch block in main method.
+
+        // As we have added try catch blocks in main method, we can now remove it from here, instead of above commented code,
+        // (from line 82 to 91), we can do as:
+
+        x = getInt();
+        y = getInt();
+        System.out.println("x is " + x + ", y is " + y);
+        return x / y;
     }
 
     private static int getInt() {
