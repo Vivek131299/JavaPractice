@@ -40,4 +40,7 @@ public class Location {
     */ //Commenting addExit() method because we are getting all the the exits when the objects constructed in the constructor.
        // See comment on line 10.
 
+    protected void addExit(String direction, int location) {
+        exits.put(direction, location);
+    }
 }

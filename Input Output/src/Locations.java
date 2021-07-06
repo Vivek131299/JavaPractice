@@ -1,3 +1,4 @@
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -124,6 +125,44 @@ public class Locations implements Map<Integer, Location> {
             if (scanner != null) {
                 scanner.close(); // When we close scanner, it takes care that any Stream its using (like FileReader here) closes itself.
                                  // So, no need to close FileReader object here.
+            }
+        }
+
+        ////////////////////////// BufferedReader //////////////////////////
+        // BufferedReader reads text from the input stream and buffers the characters into a character array.
+        // We can define the size of buffer, but default is fine which is 8K bytes.
+        // Now our both files are less than 8K bytes, means the entire contents of the file will be read into the buffer in
+        // a single read and be available from there for the scanner to use it as it needs more data.
+
+        // So, for reading the exits:
+        try {
+            scanner = new Scanner(new BufferedReader(new FileReader("directions.txt")));
+            scanner.useDelimiter(",");
+            while(scanner.hasNextLine()) {
+                /**
+                int loc = scanner.nextInt();
+                scanner.skip(scanner.delimiter());
+                String direction = scanner.next(); // Reading next String until next delimiter.
+                scanner.skip(scanner.delimiter());
+                String dest = scanner.nextLine(); // Reading till the end of the line as there is no delimiter after that.
+                int destination = Integer.parseInt(dest);
+                 **/
+                // We can also write above commented code by using split() method like below:
+                String input = scanner.nextLine(); // Reading an entire line once.
+                String[] data = input.split(","); // Saving that 'input' String into String array 'data' separated by comma.
+                int loc = Integer.parseInt(data[0]);
+                String direction = data[1];
+                int destination = Integer.parseInt(data[2]);
+
+                System.out.println(loc + ": " + direction + ": " + destination);
+                Location location = locations.get(loc);
+                location.addExit(direction, destination);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (scanner != null) {
+                scanner.close();
             }
         }
 
