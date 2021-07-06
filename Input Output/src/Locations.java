@@ -8,12 +8,19 @@ import java.util.Set;
 public class Locations implements Map<Integer, Location> {
     private static Map<Integer, Location> locations = new HashMap<Integer, Location>();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException { // Instead of catching of exceptions below and doing nothing on them,
+                                                                // it is better to throw an exception with the method.
+                                                                // 'throws' tells that this method can throw the specified exception.
+                                                                // So now no need of catch blocks below.(commented on line 27 and 38).
+
+        // We can write below commented code with 'try with resources' approach (from line 50).
+        /**
         FileWriter locFile = null;
         try {
             locFile = new FileWriter("locations.txt");
             for (Location location : locations.values()) {
                 locFile.write(location.getLocationID() + "," + location.getDescription() + "\n");
+//                throw new IOException("test exception thrown while writing"); // We can throw exception purposely like this for testing.
             }
             //locFile.close();
             // Here is one problem that if there is any exception occurred in try block in for loop then control will be gone to
@@ -21,23 +28,34 @@ public class Locations implements Map<Integer, Location> {
             // So what we can do is we can write this close() method in finally{} block.
             // FINALLY BLOCK always executes no matter what is the situation of try and catch block.
             // try block can have either catch block or finally block. It need not to have both. It must have at least one.
-        } catch(IOException e) {
-            System.out.println("in catch block");
-            e.printStackTrace();
+//        } catch(IOException e) {
+//            System.out.println("in catch block");
+//            e.printStackTrace();
         } finally {
             System.out.println("In finally block");
             // But directly writing close() here can also throw exception. So again, we will write it in try block here.
-            try {
+//            try {
                 if (locFile != null) {
                     System.out.println("Attempting to close locFile");
                     locFile.close();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
         }
         // If there exists a folder of same name as of our file name (i.e.- locations.txt), then it will give us an
         // error/exception (FileNotFoundException).
+**/
+
+        ////////////////////////// TRY WITH RESOURCES //////////////////////////
+        try (FileWriter locFile = new FileWriter("locations.txt")) { // In this 'try with resources', format is different,
+                                                                             // we are creating FileWriter object in brackets.
+            for (Location location : locations.values()) {
+                locFile.write(location.getLocationID() + "," + location.getDescription() + "\n");
+            }
+        }
+        // As we can see this 'try with resources' block is much neater than previous try block(commented above).
+        // It automatically ensures that the FileWriter stream is closed whether the code executes normally or an exception occurs.
 
     }
 
