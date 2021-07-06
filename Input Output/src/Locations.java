@@ -1,9 +1,7 @@
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Locations implements Map<Integer, Location> {
     private static Map<Integer, Location> locations = new HashMap<Integer, Location>();
@@ -48,10 +46,17 @@ public class Locations implements Map<Integer, Location> {
 **/
 
         ////////////////////////// TRY WITH RESOURCES //////////////////////////
-        try (FileWriter locFile = new FileWriter("locations.txt")) { // In this 'try with resources', format is different,
-                                                                             // we are creating FileWriter object in brackets.
+        try (FileWriter locFile = new FileWriter("locations.txt");
+             FileWriter dirFile = new FileWriter("directions.txt")) {
+            // In this 'try with resources', format is different, we create object in the bracket.
+            // We can create multiple objects in try brackets separated by semicolon like we have done above.
+            // We have two objects of FileWriter, locFile and dirFile.
+
             for (Location location : locations.values()) {
                 locFile.write(location.getLocationID() + "," + location.getDescription() + "\n");
+                for (String direction : location.getExits().keySet()) {
+                    dirFile.write(location.getLocationID() + "," + direction + "," + location.getExits().get(direction) + "\n");
+                }
             }
         }
         // As we can see this 'try with resources' block is much neater than previous try block(commented above).
@@ -60,6 +65,9 @@ public class Locations implements Map<Integer, Location> {
     }
 
     static {
+        // As we were adding exits manually before(commented below), now we try to read the data (from line 109)
+        // from files created above instead of adding manually.
+        /**
         Map<String, Integer> tempExit = new HashMap<String, Integer>();
         // For location 0
         locations.put(0, new Location(0, "You are sitting in front of computer learning Java", tempExit));
@@ -94,6 +102,31 @@ public class Locations implements Map<Integer, Location> {
         tempExit.put("S", 1);
         tempExit.put("W", 2);
         locations.put(5, new Location(5, "You are in the forest", tempExit));
+         **/
+
+        ////////////////////////// FileReader //////////////////////////
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(new FileReader("locations.txt")); // To read from 'locations.txt' file.
+            scanner.useDelimiter(","); // To tell the scanner that our information is separated by comma(,).
+            while(scanner.hasNextLine()) { // To loop through each line till we have data(lines) by using .hasNextLine().
+                int loc = scanner.nextInt(); // In file, we have stored the location which is int, so accessing that using scanner,nextInt() to 'loc'.
+                scanner.skip(scanner.delimiter()); // It will skip the delimiter which we have set above (which is comma) and continue forward.
+                String description = scanner.nextLine(); // This will get the String (description) on that line till the end of the line.
+                System.out.println("Imported loc: " + loc + ": " + description);
+
+                Map<String, Integer> tempExit = new HashMap<>();
+                locations.put(loc, new Location(loc, description, tempExit));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (scanner != null) {
+                scanner.close(); // When we close scanner, it takes care that any Stream its using (like FileReader here) closes itself.
+                                 // So, no need to close FileReader object here.
+            }
+        }
+
     }
 
     @Override
