@@ -6,6 +6,8 @@ public class Locations implements Map<Integer, Location> {
 
     public static void main(String[] args) throws IOException {
         ////////////////////////// Byte Streams //////////////////////////
+
+        ////////////////////////// Writing Binary data //////////////////////////
         try (DataOutputStream locFile = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("locations.dat")))) {
             for (Location location : locations.values()) {
                 locFile.writeInt(location.getLocationID()); // For writing int value.(locationID).
@@ -27,50 +29,74 @@ public class Locations implements Map<Integer, Location> {
 
     static {
 
-        ////////////////////////// FileReader //////////////////////////
-        try(Scanner scanner = new Scanner(new BufferedReader(new FileReader("locations.txt")))) {
-            scanner.useDelimiter(","); // To tell the scanner that our information is separated by comma(,).
-            while(scanner.hasNextLine()) { // To loop through each line till we have data(lines) by using .hasNextLine().
-                int loc = scanner.nextInt(); // In file, we have stored the location which is int, so accessing that using scanner,nextInt() to 'loc'.
-                scanner.skip(scanner.delimiter()); // It will skip the delimiter which we have set above (which is comma) and continue forward.
-                String description = scanner.nextLine(); // This will get the String (description) on that line till the end of the line.
-                System.out.println("Imported loc: " + loc + ": " + description);
+        ////////////////////////// Reading Binary data //////////////////////////
+        try(DataInputStream locFile = new DataInputStream(new BufferedInputStream(new FileInputStream("locations.dat")))) {
+            boolean eof = false;
+//            while (true) {
+            while (!eof) {
+                try {
+                    Map<String, Integer> exits = new LinkedHashMap<>();
+                    int locID = locFile.readInt();
+                    String description = locFile.readUTF();
+                    int numExits = locFile.readInt();
+                    System.out.println("Read location " + locID + " : " + description);
+                    System.out.println("Found " + numExits + " exits");
+                    for (int i = 0; i < numExits; i++) {
+                        String direction = locFile.readUTF();
+                        int destination = locFile.readInt();
+                        exits.put(direction, destination);
+                        System.out.println("\t\t" + direction + "," + destination);
+                    }
+                    locations.put(locID, new Location(locID, description, exits));
+                } catch(EOFException e) {
+                    eof = true;
+                }
 
-                Map<String, Integer> tempExit = new HashMap<>();
-                locations.put(loc, new Location(loc, description, tempExit));
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch(IOException io) {
+            System.out.println("IO Exception");
         }
+        // This while loop will be exited automatically after file has been completed reading by throwing EOF(End Of Line) Exception
+        // which is a sub class of IOException.
+        // So this EOFException will terminate the while loop and catch block will catch that Exception.
+        // BUT this is not a good way of ending a while loop because if due to any other reason IOException is raised then
+        // we won't be able to know that something else has caused the loop to terminate.
+        // So we change the while loop condition with the boolean 'eof' variable and then adding another try block inside while loop
+        // and then inside this try block we will read the data from the file.
 
-        // As we are in static block, we can't just use 'throws' in the main method as we did with above try block (on line 50),
-        // because static initialization block executes when the class is loaded. So any exceptions thrown in this will not be
-        // caught by our 'throws' in main method.
-        // We can throw unchecked exceptions in static initialization block but not checked ones, because unchecked exceptions
-        // don't have to be caught.
-
-        ////////////////////////// BufferedReader //////////////////////////
-        // BufferedReader reads text from the input stream and buffers the characters into a character array.
-        // We can define the size of buffer, but default is fine which is 8K bytes.
-        // Now our both files are less than 8K bytes, means the entire contents of the file will be read into the buffer in
-        // a single read and be available from there for the scanner to use it as it needs more data.
-
-        // So, for reading the exits:
-        try(BufferedReader dirFile = new BufferedReader(new FileReader("directions.txt"))) {
-            String input;
-            while((input = dirFile.readLine()) != null) {
-                String[] data = input.split(","); // Saving that 'input' String into String array 'data' separated by comma.
-                int loc = Integer.parseInt(data[0]);
-                String direction = data[1];
-                int destination = Integer.parseInt(data[2]);
-
-                System.out.println(loc + ": " + direction + ": " + destination);
-                Location location = locations.get(loc);
-                location.addExit(direction, destination);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//
+//        ////////////////////////// FileReader //////////////////////////
+//        try(Scanner scanner = new Scanner(new BufferedReader(new FileReader("locations.txt")))) {
+//            scanner.useDelimiter(","); // To tell the scanner that our information is separated by comma(,).
+//            while(scanner.hasNextLine()) { // To loop through each line till we have data(lines) by using .hasNextLine().
+//                int loc = scanner.nextInt(); // In file, we have stored the location which is int, so accessing that using scanner,nextInt() to 'loc'.
+//                scanner.skip(scanner.delimiter()); // It will skip the delimiter which we have set above (which is comma) and continue forward.
+//                String description = scanner.nextLine(); // This will get the String (description) on that line till the end of the line.
+//                System.out.println("Imported loc: " + loc + ": " + description);
+//
+//                Map<String, Integer> tempExit = new HashMap<>();
+//                locations.put(loc, new Location(loc, description, tempExit));
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        // So, for reading the exits:
+//        try(BufferedReader dirFile = new BufferedReader(new FileReader("directions.txt"))) {
+//            String input;
+//            while((input = dirFile.readLine()) != null) {
+//                String[] data = input.split(","); // Saving that 'input' String into String array 'data' separated by comma.
+//                int loc = Integer.parseInt(data[0]);
+//                String direction = data[1];
+//                int destination = Integer.parseInt(data[2]);
+//
+//                System.out.println(loc + ": " + direction + ": " + destination);
+//                Location location = locations.get(loc);
+//                location.addExit(direction, destination);
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
     }
 
