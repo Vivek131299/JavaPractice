@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.Buffer;
 import java.util.*;
 
 public class Locations implements Map<Integer, Location> {
@@ -106,9 +107,9 @@ public class Locations implements Map<Integer, Location> {
          **/
 
         ////////////////////////// FileReader //////////////////////////
-        Scanner scanner = null;
-        try {
-            scanner = new Scanner(new FileReader("locations.txt")); // To read from 'locations.txt' file.
+//        Scanner scanner = null;
+        try(Scanner scanner = new Scanner(new FileReader("locations.txt"))) {
+//            scanner = new Scanner(new FileReader("locations.txt")); // To read from 'locations.txt' file.
             scanner.useDelimiter(","); // To tell the scanner that our information is separated by comma(,).
             while(scanner.hasNextLine()) { // To loop through each line till we have data(lines) by using .hasNextLine().
                 int loc = scanner.nextInt(); // In file, we have stored the location which is int, so accessing that using scanner,nextInt() to 'loc'.
@@ -121,12 +122,19 @@ public class Locations implements Map<Integer, Location> {
             }
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (scanner != null) {
-                scanner.close(); // When we close scanner, it takes care that any Stream its using (like FileReader here) closes itself.
-                                 // So, no need to close FileReader object here.
-            }
         }
+//        finally {
+//            if (scanner != null) {
+//                scanner.close(); // When we close scanner, it takes care that any Stream its using (like FileReader here) closes itself.
+//                                 // So, no need to close FileReader object here.
+//            }
+//        }
+
+        // As we are in static block, we can't just use 'throws' in the main method as we did with above try block (on line 50),
+        // because static initialization block executes when the class is loaded. So any exceptions thrown in this will not be
+        // caught by our 'throws' in main method.
+        // We can throw unchecked exceptions in static initialization block but not checked ones, because unchecked exceptions
+        // don't have to be caught.
 
         ////////////////////////// BufferedReader //////////////////////////
         // BufferedReader reads text from the input stream and buffers the characters into a character array.
@@ -135,10 +143,11 @@ public class Locations implements Map<Integer, Location> {
         // a single read and be available from there for the scanner to use it as it needs more data.
 
         // So, for reading the exits:
-        try {
-            scanner = new Scanner(new BufferedReader(new FileReader("directions.txt")));
-            scanner.useDelimiter(",");
-            while(scanner.hasNextLine()) {
+        try(BufferedReader dirFile = new BufferedReader(new FileReader("directions.txt"))) {
+//            scanner = new Scanner(new BufferedReader(new FileReader("directions.txt")));
+//            scanner.useDelimiter(",");
+            String input;
+            while((input = dirFile.readLine()) != null) {
                 /**
                 int loc = scanner.nextInt();
                 scanner.skip(scanner.delimiter());
@@ -148,7 +157,8 @@ public class Locations implements Map<Integer, Location> {
                 int destination = Integer.parseInt(dest);
                  **/
                 // We can also write above commented code by using split() method like below:
-                String input = scanner.nextLine(); // Reading an entire line once.
+                // This will be easy if there are many entries int he file.
+//                String input = scanner.nextLine(); // Reading an entire line once.
                 String[] data = input.split(","); // Saving that 'input' String into String array 'data' separated by comma.
                 int loc = Integer.parseInt(data[0]);
                 String direction = data[1];
@@ -160,11 +170,12 @@ public class Locations implements Map<Integer, Location> {
             }
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (scanner != null) {
-                scanner.close();
-            }
         }
+//        finally {
+//            if (scanner != null) {
+//                scanner.close();
+//            }
+//        }
 
     }
 
