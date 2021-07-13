@@ -10,6 +10,7 @@ public class AnotherThread extends Thread {
             Thread.sleep(3000); // To sleep the Thread for 3 seconds to give time for other threads to execute.
         } catch (InterruptedException e) {
             System.out.println(ThreadColor.ANSI_BLUE + "Another thread woke me up");
+            return; // To terminate the program if thread is interrupted. (See comments from line 59 in Main class.)
         }
 
         System.out.println(ThreadColor.ANSI_BLUE + "3 seconds are passed and I am awake");
