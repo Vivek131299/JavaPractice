@@ -113,6 +113,12 @@ public class Main {
         // So lets test our lambda:
         sillyString = doStringStuff(uc, employees.get(0).getName(), employees.get(1).getName());
         System.out.println(sillyString);
+
+
+        // Below code is to test the 'AnotherClass' class.
+        AnotherClass anotherClass = new AnotherClass();
+        String s = anotherClass.doSomething();
+        System.out.println(s);
     }
 
 
@@ -163,6 +169,34 @@ class Employee {
 }
 
 interface UpperConcat {
-    public String upperAndConcat(String s1, String s2); // upperAndConcat() method converts two String passed, into uppercase
-                                                        // and concatenates them and then returns it.
+    public String upperAndConcat(String s1, String s2); // upperAndConcat() method to convert two String passed, into uppercase
+                                                        // and concatenating them and then returning it.
+}
+
+class AnotherClass {
+
+    public String doSomething() {
+        /**System.out.println("The AnotherClass class's name is: " + getClass().getSimpleName());
+        return Main.doStringStuff(new UpperConcat() {
+            @Override
+            public String upperAndConcat(String s1, String s2) {
+                System.out.println("The anonymous class's name is: " + getClass().getSimpleName()); // Doesn't prints name of a class because its anonymous class and doesn't have a name.
+                return s1.toUpperCase() + s2.toUpperCase();
+            }
+        }, "String1", "String2");**/
+
+        // Now, writing above code using Lambda instead of Anonymous class like above.
+        UpperConcat uc = (s1, s2) -> {
+            System.out.println("The lambda expression's class is: " + getClass().getSimpleName());
+            String result = s1.toUpperCase() + s2.toUpperCase();
+            return result;
+        };
+        System.out.println("The AnotherClass's name is: " + getClass().getSimpleName());
+        return Main.doStringStuff(uc, "String1", "String2");
+
+        // As we see in the output, unlike above commented code, this time we can see the lambda's class name as AnotherClass
+        // while in above anonymous class it was showing none for an anonymous class.
+        // So lambda expression isn't a class, when a code runs, an  anonymous instance isn't created. Instead the lambda is
+        // treated like a nest block of code and has the same scope as a nested block.
+    }
 }
